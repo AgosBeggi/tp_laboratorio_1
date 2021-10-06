@@ -15,63 +15,62 @@
 
 #include "Array_de_Employee.h"
 #include "Input.h"
-#include "Validation.h"
 #include "Menu.h"
+#include "Validation.h"
 
-#define SIZE_LIST 1000
+#define SIZE_LIST 4
+#define SIZE_STRING 51
+// \t cada tabulacion son 8 espacios
+//strcpy = es insegura, no avisa si se desborda la cadena
+//strcpy(cadena1, cadena2);
+//strncpy = es segura, no desborda la cadena
+//strncpy(cadena1, cadena2, sizeof(cadena1));
+//strnlen (cadena1, sizeof(cadena1)); es segura y la puedo usar para determinar
+//una cantidad maxima de caracteres
+//strncat (cadena1, cadena2, sizeof(cadena1)); es segura y es para concatenar
+//snprintf(cadena1, sizeof(cadena1), "texto", mascaras, lo que quiera);
+//printf("%s", cadena1); //sirve para un título por ejemplo, o para listar
 
 int main(void) {
 	setbuf(stdout, NULL);
 
-	int opcion;
-	char seguir;
-
 	Employee list[SIZE_LIST];
+	int estado;
+	int opcion;
+	int retorno;
+	int estadoOpcion;
+	int id;
 
-	puts("-----------------------------------------------------------------");
-	printf("\t\t\t\tBienvenido\n");
+	id = 1;
 
-	//INICIALIZAR LISTA
+	estado = initEmployees(list, SIZE_LIST);
 
-	do {
-		puts(
-				"-----------------------------------------------------------------");
-		MenuSieteOpcionesProducto(&opcion); //ok
+	if(estado == 0){
+		puts("-----------------------------------------------------------------");
+		printf("\t\t\t  BIENVENIDO\n");
+		puts("-----------------------------------------------------------------");
 
-		switch (opcion) {
-		case 1:
+		do{
+			puts("INGRESE UNA OPCIÓN: \n");
+			puts("1. ALTA DE UN EMPLEADO");
+			puts("2. MODIFICAR UN EMPLEADO");
+			puts("3. BAJA DE UN EMPLEADO");
+			puts("4. INFORMAR");
 
-			break;
-		case 2:
+			estadoOpcion = Get_A_Number_Int("\n", &opcion);
 
-			break;
-		case 3:
+			puts("-----------------------------------------------------------------");
+			if(estadoOpcion == 1 && (opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4)){
+				retorno = MenuOptions(list, SIZE_LIST, opcion, id);
+				id++;
+			}else{
+				puts("Error");
+			}
 
-			break;
-		case 4:
-
-			break;
-		case 5:
-
-			break;
-		case 6:
-
-			break;
-		case 7:
-
-			break;
-		default:
-			break;
-		}
-		puts(
-				"-----------------------------------------------------------------");
-		printf("¿Desea continuar?\n(s/n)\n");
-		scanf("%c", &seguir);
-	} while (seguir == 's' || seguir == 'S');
-
-	puts("-----------------------------------------------------------------");
-	printf("Gracias\n");
-
+		} while (retorno == 1);
+		puts("GRACIAS");
+		puts("-----------------------------------------------------------------");
+	}
 	return EXIT_SUCCESS;
 }
 

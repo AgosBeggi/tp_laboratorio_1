@@ -17,9 +17,15 @@
 #include "Input.h"
 #include "Validation.h"
 
-/// \fn void MenuOptions(int*)
-/// \brief
+/// \fn int MenuOptions(int*)
+/// \brief Print different options by console for the user to choose one.
+/// It asks for a memory address and saves the chosen option.
 /// \param opcion
-void MenuOptions(int *opcion);
+/// \return Return
+int MenuOptions(Employee* list, int len, int opcion, int id);
+
+int MenuModification(Employee* list, int len, int id, int opcion);
+
+int MenuList();
 
 #endif /* MENU_H_ */

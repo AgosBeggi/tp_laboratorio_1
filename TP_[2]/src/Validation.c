@@ -18,7 +18,7 @@ int Its_A_Number_Int(char string[]){
 		i = 1;
 	}
 
-	for(; string[i] != '\0'; i++){
+	for(i = 1; string[i] != '\0'; i++){
 
 		if(string[i] > '9' || string[i] < '0'){
 			retorno = 0;
@@ -32,7 +32,7 @@ int Its_A_Number_Int(char string[]){
 int Its_A_Number_Float(char string[]){
 
 	int i;
-	int retorno;
+	float retorno;
 	int contadorDecimal;
 
 	retorno = 1;
@@ -42,9 +42,9 @@ int Its_A_Number_Float(char string[]){
 		i = 1;
 	}
 
-	for(; string[i] != '\0'; i++){
+	for(i = 1; string[i] != '\0'; i++){
 
-		if(string[i] != '.'){
+		if(string[i] == '.'){
 			contadorDecimal++;
 		}
 

@@ -14,19 +14,19 @@
 #include <string.h>
 
 /// \fn int Its_A_Number_Int(char[])
-/// \brief Recibe como parámetro una cadena de caracteres, la
-/// recorre y se fija que cada caracter ingresado corresponda
-/// a un numero.
+/// \brief It receives as a parameter a string of characters, the
+/// go through and make sure that each character entered corresponds
+/// to a number.
 /// \param string
-/// \return Retorna un valor booleano, 0 para false y 1 para true.
+/// \return Returns a boolean value, 1 for true and 0 for false.
 int Its_A_Number_Int(char string[]);
 
-/// \fn int Its_A_Number_Float(char[])
-/// \brief Recibe como parámetro una cadena de caracteres, la
-/// recorre y se fija que cada caracter ingresado corresponda
-/// a un numero.
+/// \fn float Its_A_Number_Float(char[])
+/// \brief It receives as a parameter a string of characters, the
+/// go through and make sure that each character entered corresponds
+/// to a number.
 /// \param string
-/// \return Retorna un valor booleano, 0 para false y 1 para true.
+/// \return Returns a boolean value, 1 for true and 0 for false.
 int Its_A_Number_Float(char string[]);
 
 #endif /* VALIDATION_H_ */
