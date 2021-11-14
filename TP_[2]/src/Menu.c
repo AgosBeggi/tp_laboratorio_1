@@ -27,25 +27,43 @@ int MenuOptions(Employee* list, int len, int opcion, int id){
 	int opcion2;
 	int estadoEliminado;
 	int index;
-
+	int estadoAdd;
 
 	//---------------------
 	int opcion4;
+	int order = 1;
 
 
 
 	switch (opcion) {
 		case 1:
 			//id++;
-			estadoName = Get_String(name, SIZE_STRING, "NOMBRE: ");
-			estadoLastName = Get_String(lastName, SIZE_STRING, "APELLIDO: ");
-			estadoSalary = Get_A_Number_Float("SALARIO: ", &salary);
-			estadoSector = Get_A_Number_Int("SECTOR: ", &sector);
 
-			if(estadoName == 1 && estadoLastName == 1 && estadoSalary == 1 && estadoSector== 1){
-				estado = addEmployee(list, len, name, lastName, salary, sector, id);
+			estadoName = Get_String(name, SIZE_STRING, "NOMBRE: ");
+			while(estadoName == 1){
+				puts("Error. Intente nuevamente.");
+				estadoName = Get_String(name, SIZE_STRING, "NOMBRE: ");
 			}
-			if(estado == 0){
+			estadoLastName = Get_String(lastName, SIZE_STRING, "APELLIDO: ");
+			while(estadoLastName == 1){
+				puts("Error. Intente nuevamente.");
+				estadoLastName = Get_String(lastName, SIZE_STRING, "APELLIDO: ");
+			}
+			estadoSalary = Get_A_Number_Float("SALARIO: ", &salary);
+			while(estadoSalary != 1){
+				puts("Error. Intente nuevamente.");
+				estadoSalary = Get_A_Number_Float("SALARIO: ", &salary);
+			}
+			estadoSector = Get_A_Number_Int("SECTOR: ", &sector);
+			while(estadoSector != 1){
+				puts("Error. Intente nuevamente.");
+				estadoSector = Get_A_Number_Int("SECTOR: ", &sector);
+			}
+			if(estadoName == 1 && estadoLastName == 1 && estadoSalary == 1 && estadoSector== 1){
+				id = id + 1;
+				estadoAdd = addEmployee(list, len, name, lastName, salary, sector, id);
+			}
+			if(estadoAdd == 0){
 				puts("\nSe cargó correctamente.");
 			}
 		break;
@@ -82,6 +100,7 @@ int MenuOptions(Employee* list, int len, int opcion, int id){
 				if(estadoEliminado == 0){
 					puts("-----------------------------------------------------------------");
 					puts("Se eliminó correctamente.");
+					estado = sortEmployees(list, len, order);
 				}else{
 					puts("Error.");
 				}
@@ -90,6 +109,8 @@ int MenuOptions(Employee* list, int len, int opcion, int id){
 			break;
 		case 4:
 			//opcion4 = MenuList();
+
+
 			estado = printEmployees(list, len);
 			break;
 		default:
@@ -114,7 +135,6 @@ int MenuModification(Employee* list, int len, int id, int opcion){
 	int estadoLastName;
 	int estadoSalary;
 	int estadoSector;
-	int i;
 	Employee employee;
 
 	estado = 0;

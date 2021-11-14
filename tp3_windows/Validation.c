@@ -14,11 +14,11 @@ int Its_A_Number_Int(char string[]){
 
 	retorno = 1;
 
-	if(string[0] == '-'){
+	/*if(string[0] == '-'){
 		i = 1;
-	}
+	}*/
 
-	for(i = 1; string[i] != '\0'; i++){
+	for(i = 0; string[i] != '\0'; i++){
 
 		if(string[i] > '9' || string[i] < '0'){
 			retorno = 0;

@@ -29,6 +29,11 @@ int Its_A_Number_Int(char string[]);
 /// \return Returns a boolean value, 1 for true and 0 for false.
 int Its_A_Number_Float(char string[]);
 
+/// \fn int Is_It_Char(char[])
+/// \brief It receives as a parameter a string of characters, the
+///checks and makes sure that each character entered is not a number.
+/// \param string
+/// \return Returns a boolean value, 1 for true and 0 for false.
 int Is_It_Char(char string[]);
 
 #endif /* VALIDATION_H_ */

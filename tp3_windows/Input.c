@@ -17,8 +17,7 @@ int Get_A_Number_Int(char message[], int* pNumber){
 
 	printf("%s", message);
 	fflush(stdin);
-	fgets(string, 40, stdin);
-	string[strlen(string)-1] = '\0';
+	gets(string);
 
 	aux = Its_A_Number_Int(string);
 
@@ -61,13 +60,12 @@ int Get_String(char cadena[], int tamanio, char mensaje[]){
 	int retorno;
 	char string[51];
 	int estado;
-	int i;
 
 	retorno = 0;
 
 	printf("%s", mensaje);
 	fflush(stdin);
-	fgets(string, 40, stdin);
+	fgets(string, tamanio, stdin);
 	string[strlen(string)-1] = '\0';
 
 	estado = Is_It_Char(string);

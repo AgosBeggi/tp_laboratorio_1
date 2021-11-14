@@ -39,9 +39,7 @@ int main(void) {
 	int opcion;
 	int retorno;
 	int estadoOpcion;
-	int id;
-
-	id = 1;
+	int id = 0;
 
 	estado = initEmployees(list, SIZE_LIST);
 
@@ -62,7 +60,6 @@ int main(void) {
 			puts("-----------------------------------------------------------------");
 			if(estadoOpcion == 1 && (opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4)){
 				retorno = MenuOptions(list, SIZE_LIST, opcion, id);
-				id++;
 			}else{
 				puts("Error");
 			}

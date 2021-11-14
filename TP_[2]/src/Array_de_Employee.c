@@ -21,7 +21,7 @@ int initEmployees(Employee* list, int len){
 
 	retorno = -1;
 
-	if(len != EMPTY && list != NULL){
+	if(len > EMPTY && list != NULL){
 		for(i = 0; i < len; i++){
 			list[i].id = EMPTY;
 			list[i].salary = EMPTY;
@@ -44,10 +44,9 @@ int addEmployee(Employee* list, int len, char name[], char lastName[], float sal
 	int index;
 	Employee employee;
 
-	index = -1;
-	//id = id - 1;
+	retorno = -1;
 
-	if(len != EMPTY && list != NULL){
+	if(len > EMPTY && list != NULL){
 		for(i = 0; i < len; i++){
 			if(list[i].isEmpty == EMPTY){
 				index = i;
@@ -97,7 +96,7 @@ int removeEmployee(Employee* list, int len, int index){
 
 	retorno = -1;
 
-	if(len != EMPTY && list != NULL){
+	if(len > EMPTY && list != NULL){
 		for(i = 0; i <= index; i++){
 			if(list[i].isEmpty == FULL){
 				list[i].isEmpty = EMPTY;
@@ -115,7 +114,41 @@ int removeEmployee(Employee* list, int len, int index){
 // ORDENAR LISTA.
 int sortEmployees(Employee* list, int len, int order){
 
-	return 0;
+	int i;
+	int j;
+	Employee aux;
+	int retorno;
+
+	retorno = -1;
+
+	if(len > EMPTY && list != NULL){
+		for(i = 0; i <len; i++){
+			for(j = i+1; j <len; j++){
+				if(order == 1){
+					if(list[i].id < list[j].id){
+						list[i].isEmpty = EMPTY;
+						aux = list[i];
+						list[i] = list[j];
+						list[j] = aux;
+						retorno = 0;
+						break;
+					}
+				}
+				if(order == 2){
+					if(list[i].id > list[j].id){
+						list[i].isEmpty = EMPTY;
+						aux = list[i];
+						list[i] = list[j];
+						list[j] = aux;
+						retorno = 0;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	return retorno;
 }
 
 void printEmployee(Employee employee){
