@@ -17,6 +17,9 @@
 #define DESCUENTO 0.1
 #define INTERES 0.25
 #define BITCOIN 4606954.55
+#define AUX_KM 7090
+#define AUX_PRECIO_AEROLINEAS 162965.00
+#define AUX_PRECIO_LATAM 159339.00
 
 int main(void) {
 	setbuf(stdout, NULL);
@@ -26,14 +29,23 @@ int main(void) {
 	float precioAerolineas;
 	float precioLatam;
 	float descuentoA;
+	float aux_descuentoA;
 	float descuentoL;
+	float aux_descuentoL;
 	float aumentoA;
 	float aumentoL;
+	float aux_aumentoA;
+	float aux_aumentoL;
 	float bitA;
 	float bitL;
+	float aux_bitA;
+	float aux_bitL;
+	float aux_precioUnitarioA;
+	float aux_precioUnitarioL;
 	float precioUnitarioA;
 	float precioUnitarioL;
 	float diferencia;
+	float aux_diferencia;
 	int flag;
 
 	flag = 0;
@@ -92,7 +104,7 @@ int main(void) {
 					}
 					flag = 3;
 				}else{
-					puts("Antes debe ingresar los Kilómetros y los precios de vuelo.");
+					puts("Antes debe ingresar los precios.");
 					puts("------------------------------------------------------------------");
 				}
 				diferencia = Difference(precioAerolineas, precioLatam);
@@ -104,7 +116,7 @@ int main(void) {
 					printf("\nPrecio Aerolíneas: $ %.2f\n", precioAerolineas);
 					InformValues(descuentoA, aumentoA, bitA, precioUnitarioA);
 
-					printf("\nPrecio Aerolíneas: $ %.2f\n", precioLatam);
+					printf("\nPrecio Latam: $ %.2f\n", precioLatam);
 					InformValues(descuentoL, aumentoL, bitL, precioUnitarioL);
 
 					printf("\nLa diferencia de precio es : $ %.2f\n", diferencia);
@@ -117,24 +129,22 @@ int main(void) {
 				break;
 			case 5:
 
-				km = 7090;
-				precioAerolineas = 162965;
-				precioLatam = 159339;
-				if(AllCalculations(DESCUENTO, BITCOIN, INTERES, precioAerolineas, km, &descuentoA, &aumentoA, &bitA, &precioUnitarioA) == 0){
-					if(AllCalculations(DESCUENTO, BITCOIN, INTERES, precioLatam, km, &descuentoL, &aumentoL, &bitL, &precioUnitarioL) == 0){
-						diferencia = Difference(precioAerolineas, precioLatam);
+				if(AllCalculations(DESCUENTO, BITCOIN, INTERES, AUX_PRECIO_AEROLINEAS, AUX_KM, &aux_descuentoA, &aux_aumentoA, &aux_bitA, &aux_precioUnitarioA) == 0){
+
+					if(AllCalculations(DESCUENTO, BITCOIN, INTERES, AUX_PRECIO_LATAM, AUX_KM, &aux_descuentoL, &aux_aumentoL, &aux_bitL, &aux_precioUnitarioL) == 0){
+						aux_diferencia = Difference(AUX_PRECIO_AEROLINEAS, AUX_PRECIO_LATAM);
 					}
 				}
 
-				printf("KMs Ingresados: %d km\n", km);
+				printf("KMs Ingresados: %d km\n", AUX_KM);
 
-				printf("\nPrecio Aerolíneas: $ %.2f\n", precioAerolineas);
-				InformValues(descuentoA, aumentoA, bitA, precioUnitarioA);
+				printf("\nPrecio Aerolíneas: $ %.2f\n", AUX_PRECIO_AEROLINEAS);
+				InformValues(aux_descuentoA, aux_aumentoA, aux_bitA, aux_precioUnitarioA);
 
-				printf("\nPrecio Aerolíneas: $ %.2f\n", precioLatam);
-				InformValues(descuentoL, aumentoL, bitL, precioUnitarioL);
+				printf("\nPrecio Latam: $ %.2f\n", AUX_PRECIO_LATAM);
+				InformValues(aux_descuentoL, aux_aumentoL, aux_bitL, aux_precioUnitarioL);
 
-				printf("\nLa diferencia de precio es : $ %.2f\n", diferencia);
+				printf("\nLa diferencia de precio es : $ %.2f\n", aux_diferencia);
 				puts("\n------------------------------------------------------------------");
 				break;
 			case 6:
