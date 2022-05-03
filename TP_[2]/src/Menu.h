@@ -14,19 +14,23 @@
 
 #define SIZE 51
 
+int idMenu(int* id, Passenger* list, int len);
+
 int startMenu(Passenger* list, int len, Status* status_list, int lenStatus);
 
-int singUpMenu(Passenger* list, int len, int id, char name[],char lastName[], float price, int typePassenger, char flycode[]);
+int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int lenStatus);
 
-int deleteMenu(Passenger* list, int len, int id);
+int singUpMenu(Passenger* list, int len, int id, char name[],char lastName[], float price, int typePassenger, char flycode[], Status* status_list, int lenStatus);
 
-int MenuModifications(Passenger* list, int len, int id, int option, char message[]);
+int deleteMenu(Passenger* list, int len, int id, Status* status_list, int lenStatus);
 
-int reportsMenu(Passenger* list, int len);
+int MenuModifications(Passenger* list, int len, int id, int option, char message[], Status* status_list, int lenStatus, char messageError[]);
 
-int orderMenu(Passenger* list, int len);
+int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus);
 
-int idMenu(int id);
+int orderMenu(Passenger* list, int len, int order);
+
+
 
 
 #endif /* MENU_H_ */

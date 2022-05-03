@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "ArrayStatus.h"
 
 #define EMPTY 0
 #define FULL 1
@@ -20,7 +21,7 @@ typedef struct{
 	char name[51];
 	char lastName[51];
 	float price;
-	char flycode[10];
+	Status flycode;
 	int typePassenger;
 	int isEmpty;
 }Passenger;
@@ -71,6 +72,8 @@ int findPassengerById(Passenger* list, int len,int id);
 //int findEmployeeByEmpty(Employee* list, int len);
 int findPassengerEmpty(Passenger* list, int len);
 
+int findPassengerByFlycode(Passenger* list, int len, char flycode[]);
+
 //SUPRIMIR
 /// @fn int removePassenger(Passenger*, int, int)
 /// @brief Remove a Passenger by Id (put isEmpty Flag in 1)
@@ -119,16 +122,17 @@ int sortPassengersByCode(Passenger* list, int len, int order);
 /// @return int
 int printPassenger(Passenger* list, int length);
 
-void printPassengers(Passenger passenger);
+int printPassengers(Passenger passenger);
 
 int modifyPassengerName(Passenger* list, int len, int id, char name[]);
 
 int modifyPassengerLastName(Passenger* list, int len, int id, char lastName[]);
 
-int modifyPassengerTypePassenger(Passenger* list, int len, int id, int typePassenger);
+int modifyTypePassenger(Passenger* list, int len, int id, int typePassenger);
 
 int modifyPassengerPrice(Passenger* list, int len, int id, float price);
 
 int modifyPassengerFlycode(Passenger* list, int len, int id, char flycode[]);
+
 
 #endif /* ARRAYPASSENGER_H_ */
