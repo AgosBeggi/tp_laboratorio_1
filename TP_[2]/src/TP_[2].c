@@ -39,7 +39,7 @@ int main(void) {
 	char name[SIZE];
 	char lastName[SIZE];
 	float price;
-	char flycode[10];
+	//char flycode[10];
 	int typePassenger;
 
 	char messageTypePassenger[250];
@@ -53,6 +53,11 @@ int main(void) {
 	strcpy(messageError, "Opción incorrecta, vuelva a intentarlo.\n");
 	strcpy(messageTitle, "ID \tNOMBRE \t\tAPELLIDO  \tPRECIO \t\tTIPO \t\tCODIGO  \tESTADO");
 	strcpy(messageStatus, "ESTADO DE VUELO\n\n1. ACTIVO\n2. DEMORADO\n3. REPROGRAMADO\n4. CANCELADO\n");
+
+	char randomletter2 = '1' + (rand() % 9);
+	char randomletter = 'A' + (rand() % 26);
+	printf("%c\n", randomletter2);
+	printf("%c\n", randomletter);
 
 	// !!!!!!!Tener en cuenta que no se podrá ingresar a los casos 2, 3 y 4; sin antes haber realizado la
 	//carga de algún empleado.!!!!!!!!
@@ -89,7 +94,7 @@ int main(void) {
 			switch(opcion){
 				case 0:
 					idMenu(&id, list, ELEMENTS);
-					hardcodeListMenu(list, ELEMENTS, id, status_list, ELEMENTS);
+					hardcodeListMenu(list, ELEMENTS, id, status_list, ELEMENTS, &id);
 					break;
 				case 1:
 					//ALTA
@@ -98,7 +103,7 @@ int main(void) {
 					getString("NOMBRE: ", name);
 					getString("APELLIDO: ", lastName);
 					getFloat("PRECIO: ", &price);
-					getStringAlnum("CODIGO DE VEULO: ", flycode);
+					//getStringAlnum("CODIGO", flycode);
 					do{
 						printf("%s\n", messageTypePassenger);
 						getInt("", &typePassenger);
@@ -106,7 +111,7 @@ int main(void) {
 							printf("%s\n", messageError);
 						}
 					}while(typePassenger != 1 && typePassenger != 2 && typePassenger != 3 && typePassenger != 4);
-					if(singUpMenu(list, ELEMENTS, id, name, lastName, price, typePassenger, flycode, status_list, ELEMENTS)==0){
+					if(singUpMenu(list, ELEMENTS, id, name, lastName, price, typePassenger, status_list, ELEMENTS)==0){
 						puts("------------------------------------------------------------------");
 						printf("%s\n", messageOk);
 						puts("------------------------------------------------------------------");
@@ -115,7 +120,7 @@ int main(void) {
 				case 2:
 					//MODIFICAR
 					printf("%s\n", messageTitle);
-					reportsMenu(list, ELEMENTS, status_list, ELEMENTS);
+					reportsMenuAll(list, ELEMENTS, status_list, ELEMENTS);
 					puts("------------------------------------------------------------------");
 					getInt("Ingrese el id del pasajero que desea modificar\n", &numeroId);
 					//VALIDAR EL ID INGRESADO
@@ -127,12 +132,11 @@ int main(void) {
 						puts("1. NOMBRE");
 						puts("2. APELLIDO");
 						puts("3. PRECIO");
-						puts("4. CODIGO DE VUELO");
-						puts("5. TIPO DE PASAJERO");
-						puts("6. ESTADO DE VUELO");
+						puts("4. TIPO DE PASAJERO");
+						puts("5. ESTADO DE VUELO");
 
 						getInt("", &option);
-					}while(option != 1 && option != 2 && option != 3 && option != 4 && option != 5);
+					}while(option != 1 && option != 2 && option != 3 && option != 4 && option != 5 && option != 6);
 					switch(option){
 						case 1:
 							if(MenuModifications(list, ELEMENTS, numeroId, option, "NOMBRE: ", status_list, ELEMENTS, messageError) == 0){
@@ -169,12 +173,19 @@ int main(void) {
 								puts("------------------------------------------------------------------");
 							}
 							break;
+						case 6:
+							if(MenuModifications(list, ELEMENTS, numeroId, option, messageStatus, status_list, ELEMENTS, messageError) == 0){
+								puts("------------------------------------------------------------------");
+								printf("%s\n", messageOk);
+								puts("------------------------------------------------------------------");
+							}
+							break;
 						}
 					break;
 				case 3:
 					//BAJA
 					printf("%s\n", messageTitle);
-					reportsMenu(list, ELEMENTS, status_list, ELEMENTS);
+					reportsMenuAll(list, ELEMENTS, status_list, ELEMENTS);
 
 					getInt("Ingrese el id del pasajero que desea eliminar\n", &numeroId);
 					if(deleteMenu(list, ELEMENTS, numeroId, status_list, ELEMENTS) == 0){
@@ -186,6 +197,7 @@ int main(void) {
 				case 4:
 					//INFORMES
 					printf("%s\n", messageTitle);
+					reportsMenuAll(list, ELEMENTS, status_list, ELEMENTS);
 					reportsMenu(list, ELEMENTS, status_list, ELEMENTS);
 					puts("------------------------------------------------------------------");
 					puts("¿Cómo desea ordenar la lista?\n");

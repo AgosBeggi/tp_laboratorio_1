@@ -15,6 +15,7 @@ int initStatus(Status* status_list, int lenStatus){
 
 	if(status_list !=NULL && lenStatus > 0){
 		status_aux.id_status = EMPTY;
+		//status_aux.passenger.id = status_aux.id_status;
 		strcpy(status_aux.flycode, "0");
 		status_aux.statusFlight = EMPTY;
 
@@ -60,17 +61,24 @@ int findStatusEmpty(Status* status_list, int lenStatus){//OK
 }
 
 //AGREGAR
-int addStatus(Status* status_list, int lenStatus, char flycode[], int id_status){
+int addStatus(Status* status_list, int lenStatus, int id_status){
 	int retorno = -1;//FALSE
 	int index;
+	char auxCharCode[10];
 
-	if(status_list !=NULL && lenStatus > 0 && flycode != NULL && id_status != -1){
+	if(status_list !=NULL && lenStatus > 0 && id_status != -1){
 		index = findStatusEmpty(status_list, lenStatus);
 
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
+				auxCharCode[0] = '1' + (rand() % 10);
+				auxCharCode[1] = 'A' + (rand() % 26);
+				auxCharCode[2] = '1' + (rand() % 11);
+				auxCharCode[3] = 'A' + (rand() % 26);
+				auxCharCode[4] = 'A' + (rand() % 26);
+
 				status_list->id_status = id_status;
-				strncpy(status_list[i].flycode, flycode, sizeof(status_list[i].flycode));
+				strncpy(status_list[i].flycode, auxCharCode, sizeof(status_list[i].flycode));
 				status_list[i].statusFlight = ACTIVE;
 				retorno = 0;//TRUE
 			}
@@ -116,19 +124,21 @@ int printStatusList(Status* status_list, int lenStatus){//OK
 int printStatus(Status status){//OK
 
 	int retorno = -1;//FALSE
+
 	if(status.statusFlight != EMPTY){
+
 		switch(status.statusFlight){
 		case 1:
-			printf("%s \tACTIVO\n", status.flycode);
+			printf("%d \t%s \tACTIVO\n", status.id_status, status.flycode);
 			break;
 		case 2:
-			printf("%s \tDEMORADO\n", status.flycode);
+			printf("%d \t%s \tDEMORADO\n", status.id_status, status.flycode);
 			break;
 		case 3:
-			printf("%s \tREPROGRAMADO\n", status.flycode);
+			printf("%d \t%s \tREPROGRAMADO\n", status.id_status, status.flycode);
 			break;
 		case 4:
-			printf("%s \tCANCELADO\n", status.flycode);
+			printf("%d \t%s \tCANCELADO\n", status.id_status, status.flycode);
 			break;
 		}
 		retorno = 0;//TRUE

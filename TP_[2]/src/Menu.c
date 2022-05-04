@@ -39,7 +39,7 @@ int startMenu(Passenger* list, int len, Status* status_list, int lenStatus){
 	return retorno;
 }
 
-int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int lenStatus){
+int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int lenStatus, int* auxId){
 
 	int retorno = -1;//FALSE
 	int indexP;
@@ -49,7 +49,7 @@ int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int 
 	char name[10][51]={"ANTONIO", "MARIA", "JOSE", "CARMEN", "FRANCISCO", "JOSEFA", "JUAN", "ISABEL", "MANUEL", "DOLORES"};
 	char lastName[10][51]={"GARCIA", "MARTINEZ", "SANCHEZ", "GONZALEZ", "GOMEZ", "PEREZ", "JUAN", "NAVARRO", "DIAZ", "HERNANDEZ"};
 	float price[10]={95560.0, 75200.0, 67103.0, 55460.0, 95056.0, 40926.0, 55046.0, 75200.0, 67103.0, 49026.0};
-	char flycode[10][10]={"A1Z26", "B9X62", "C7M58", "D4J13", "E2R47", "A1Y27", "B1W63", "C8L59", "D5K14", "E3Q48"};
+	char flycode[10][10]={"1Z2AG", "9X6BZ", "7M5CB", "4J1DB", "2R4ET", "1Y2AT", "1W6BB", "8L5CP", "5K1DA", "3Q4EH"};
 	int typePassenger[10]={1,2,3,4,1,2,3,4,2,3};
 
 	if(list != NULL && len > 0 && status_list !=NULL && lenStatus > 0){
@@ -66,7 +66,7 @@ int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int 
 				strcpy(list[i].name, name[j]);
 				strcpy(list[i].lastName, lastName[j]);
 				list[i].price = price[j];
-				strcpy(list[i].flycode.flycode, flycode[j]);
+				strcpy(list[i].flycode, flycode[j]);
 				list[i].typePassenger = typePassenger[j];
 				status_list[i].id_status = id;
 				strcpy(status_list[i].flycode, flycode[j]);
@@ -81,18 +81,22 @@ int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int 
 			j++;
 		}
 	}
+	*auxId = control;
 	return retorno;
 }
 
 //AGREGAR
-int singUpMenu(Passenger* list, int len, int id, char name[],char lastName[], float price, int typePassenger, char flycode[], Status* status_list, int lenStatus){
+int singUpMenu(Passenger* list, int len, int id, char name[],char lastName[], float price, int typePassenger, Status* status_list, int lenStatus){
 
 	int retorno = -1;
+	int index;
 
 	if(list != NULL && len > 0 && id != -1 && name !=NULL && lastName !=NULL && price != EMPTY
-			&& typePassenger != EMPTY && flycode != NULL  && status_list != NULL && lenStatus > 0){
+			&& typePassenger != EMPTY && status_list != NULL && lenStatus > 0){
+			addStatus(status_list, lenStatus, id);
+			index = findStatusById(status_list, lenStatus, id);
 
-		if(addPassenger(list, len, id, name, lastName, price, typePassenger, flycode) == 0 && addStatus(status_list, lenStatus, flycode, id) == 0){
+		if(addPassenger(list, len, id, name, lastName, price, typePassenger, status_list[index].flycode) == 0){
 			retorno = 0;
 		}
 	}
@@ -119,7 +123,7 @@ int MenuModifications(Passenger* list, int len, int id, int option, char message
 	char name[SIZE];
 	char lastName[SIZE];
 	float price;
-	char flycode[10];
+	//char flycode[10];
 	int typePassenger;
 	int statusFlight;
 
@@ -145,13 +149,6 @@ int MenuModifications(Passenger* list, int len, int id, int option, char message
 				}
 				break;
 			case 4:
-				if(getStringAlnum(message, flycode) == 0){
-					if(modifyPassengerFlycode(list, len, id, flycode) == 0){
-						retorno = 0;
-					}
-				}
-				break;
-			case 5:
 				do{
 					printf(message);
 					getInt("", &typePassenger);
@@ -163,8 +160,13 @@ int MenuModifications(Passenger* list, int len, int id, int option, char message
 				if(modifyTypePassenger(list, len, id, typePassenger) == 0){
 					retorno = 0;
 				}
+//				if(getStringAlnum(message, flycode) == 0){
+//					if(modifyPassengerFlycode(list, len, id, flycode) == 0){
+//						retorno = 0;
+//					}
+//				}
 				break;
-			case 6:
+			case 5:
 				do{
 					printf(message);
 					getInt("", &statusFlight);
@@ -177,20 +179,103 @@ int MenuModifications(Passenger* list, int len, int id, int option, char message
 					retorno = 0;
 				}
 				break;
+//			case 6:
+//
+//				break;
 		}
 	}
 	return retorno;
 }
 
 //REPORTAR
-int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus){
+int reportsMenuAll(Passenger* list, int len, Status* status_list, int lenStatus){
 
 	int retorno = -1;
+	int aux;
 
 	if(list != NULL && len > 0 && status_list != NULL && lenStatus > 0){
-		if(printPassenger(list, len) == 0 && printStatusList(status_list, lenStatus) == 0){
+
+		for(int i = 0; i < len; i++){
+			aux = list[i].typePassenger;
+			switch(aux){
+				case 1:
+					switch(status_list[i].statusFlight){
+						case 1:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tACTIVO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 2:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tDEMORADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 3:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tREPROGRAMADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 4:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tCANCELADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						}
+					break;
+				case 2:
+					switch(status_list[i].statusFlight){
+						case 1:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tACTIVO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 2:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tDEMORADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 3:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tREPROGRAMADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 4:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tCANCELADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						}
+					break;
+				case 3:
+					switch(status_list[i].statusFlight){
+						case 1:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tACTIVO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 2:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tDEMORADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 3:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tREPROGRAMADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 4:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tCANCELADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						}
+					break;
+				case 4:
+					switch(status_list[i].statusFlight){
+						case 1:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tACTIVO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 2:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tDEMORADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 3:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tREPROGRAMADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						case 4:
+							printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tCANCELADO\n", list[i].id, list[i].name, list[i].lastName, list[i].price, list[i].flycode);
+							break;
+						}
+					break;
+			}
 			retorno = 0;
 		}
+	}
+	return retorno;
+}
+
+int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus){
+	int retorno = -1;//FALSE
+
+	if(list != NULL && len > 0 && status_list != NULL && lenStatus > 0){
+		printPassenger(list, len);
+		printStatusList(status_list, lenStatus);
+		retorno = 0;//TRUE
 	}
 	return retorno;
 }
@@ -199,12 +284,12 @@ int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus){
 int orderMenu(Passenger* list, int len, int order){
 	int retorno = -1;
 
-		if(sortPassengers(list, len, order) == 0){
-			retorno = 0;
-			order = 0;
-		}
+	if(sortPassengers(list, len, order) == 0){
+		retorno = 0;
+		order = 0;
+	}
 
-		return retorno;
+	return retorno;
 }
 
 

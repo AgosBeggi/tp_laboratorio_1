@@ -19,7 +19,7 @@ int initPassengers(Passenger* list, int len){
 		strcpy(passenger_aux.name, "0");
 		strcpy(passenger_aux.lastName, "0");
 		passenger_aux.price = EMPTY;
-		strcpy(passenger_aux.flycode.flycode, "0");
+		strcpy(passenger_aux.flycode, "0");
 		passenger_aux.typePassenger = EMPTY;
 		passenger_aux.isEmpty = EMPTY;
 
@@ -45,7 +45,7 @@ int addPassenger(Passenger* list, int len, int id, char name[],
 		strncpy(passenger_aux.name, name, sizeof(passenger_aux.name));
 		strncpy(passenger_aux.lastName, lastName, sizeof(passenger_aux.lastName));
 		passenger_aux.price = price;
-		strncpy(passenger_aux.flycode.flycode, flycode, sizeof(passenger_aux.flycode));
+		strncpy(passenger_aux.flycode, flycode, sizeof(passenger_aux.flycode));
 		passenger_aux.typePassenger = typePassenger;
 		passenger_aux.isEmpty = FULL;
 
@@ -98,7 +98,7 @@ int findPassengerByFlycode(Passenger* list, int len, char flycode[]){//OK
 
 	if(list !=NULL && len > 0 && flycode != NULL){
 		for(int i = 0; i < len; i++){
-			if(strcmp(list[i].flycode.flycode, flycode) == 0){
+			if(strcmp(list[i].flycode, flycode) == 0){
 				index = i;//RETORNA POSICION DEL ID ENCONTRADO
 				break;
 			}
@@ -172,65 +172,30 @@ int printPassenger(Passenger* list, int len){//OK
 int printPassengers(Passenger passenger){//OK
 
 	int retorno = -1;//FALSE
-	int aux;
-
-
 
 	if(passenger.isEmpty == FULL){
-		aux = passenger.flycode.id_status;
 		switch(passenger.typePassenger){
 			case 1:
-				printf("%d\n", aux);
-				if(passenger.flycode.statusFlight == 1){
-					printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tACTIVO\n",
-					passenger.id, passenger.name, passenger.lastName,
-					passenger.price, passenger.flycode.flycode);
-					//printf("");
-				}
-				if(passenger.flycode.statusFlight == 2){
-					printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tDEMORADO\n",
-					passenger.id, passenger.name, passenger.lastName,
-					passenger.price, passenger.flycode.flycode);
-					//printf("%s \tDEMORADO\n", passenger.flycode.flycode);
-				}
-				if(passenger.flycode.statusFlight == 3){
-					printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tREPROGRAMADO\n",
-					passenger.id, passenger.name, passenger.lastName,
-					passenger.price, passenger.flycode.flycode);
-					//printf("%s \tREPROGRAMADO\n", passenger.flycode.flycode);
-				}
-				if(passenger.flycode.statusFlight == 4){
-					printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tCANCELADO\n",
-					passenger.id, passenger.name, passenger.lastName,
-					passenger.price, passenger.flycode.flycode);
-					//printf("%s \tCANCELADO\n", passenger.flycode.flycode);
-				}
+				printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s\n",
+				passenger.id, passenger.name, passenger.lastName,
+				passenger.price, passenger.flycode);
 				break;
 			case 2:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tCANCELADO\n",
+				printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s\n",
 				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode.flycode);
-//				printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \n",
-//						passenger.id, passenger.name, passenger.lastName,
-//						passenger.price);
+				passenger.price, passenger.flycode);
 				break;
 			case 3:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tCANCELADO\n",
+				printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s\n",
 				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode.flycode);
-//				printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \n",
-//						passenger.id, passenger.name, passenger.lastName,
-//						passenger.price);
+				passenger.price, passenger.flycode);
 				break;
 			case 4:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tCANCELADO\n",
+				printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s\n",
 				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode.flycode);
-//				printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \n",
-//						passenger.id, passenger.name, passenger.lastName,
-//						passenger.price);
+				passenger.price, passenger.flycode);
 				break;
-			}
+		}
 		retorno = 0;//TRUE
 	}
 	return retorno;
@@ -318,7 +283,7 @@ int modifyPassengerFlycode(Passenger* list, int len, int id, char flycode[]){//O
 	index = findPassengerById(list, len, id);
 		for(int i = 0; i < len; i++){
 			if(i == index){
-				strncpy(list[i].flycode.flycode, flycode, sizeof(list[i].flycode));
+				strncpy(list[i].flycode, flycode, sizeof(list[i].flycode));
 				retorno = 0;//TRUE
 				break;
 			}

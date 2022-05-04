@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "ArrayStatus.h"
 
 #define EMPTY 0
 #define FULL 1
@@ -21,7 +20,7 @@ typedef struct{
 	char name[51];
 	char lastName[51];
 	float price;
-	Status flycode;
+	char flycode[10];
 	int typePassenger;
 	int isEmpty;
 }Passenger;
@@ -123,6 +122,7 @@ int sortPassengersByCode(Passenger* list, int len, int order);
 int printPassenger(Passenger* list, int length);
 
 int printPassengers(Passenger passenger);
+//int printPassengers(Passenger passenger, Status status);
 
 int modifyPassengerName(Passenger* list, int len, int id, char name[]);
 

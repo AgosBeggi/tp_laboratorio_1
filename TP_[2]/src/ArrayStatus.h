@@ -9,10 +9,10 @@
 #define ARRAYSTATUS_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define ELEMENTS 1000
-
 
 #define EMPTY 0
 #define ACTIVE 1
@@ -30,7 +30,7 @@ int initStatus(Status* status_list, int lenStatus);
 
 int findStatusById(Status* status_list, int lenStatus, int id_status);
 
-int addStatus(Status* status_list, int lenStatus, char flycode[], int id_status);
+int addStatus(Status* status_list, int lenStatus, int id_status);
 
 int findStatusEmpty(Status* status_list, int lenStatus);
 
