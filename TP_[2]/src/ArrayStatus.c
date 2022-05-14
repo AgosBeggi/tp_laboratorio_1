@@ -14,11 +14,7 @@ int initStatus(Status* status_list, int lenStatus){
 	Status status_aux;
 
 	if(status_list !=NULL && lenStatus > 0){
-		status_aux.id_status = EMPTY;
-		//status_aux.passenger.id = status_aux.id_status;
-		strcpy(status_aux.flycode, "0");
 		status_aux.statusFlight = EMPTY;
-
 		for(int i = 0; i < lenStatus; i++){
 			status_list[i] = status_aux;
 			if(status_list[i].statusFlight == EMPTY){
@@ -30,13 +26,14 @@ int initStatus(Status* status_list, int lenStatus){
 }
 
 //BUSQUEDA
-int findStatusById(Status* status_list, int lenStatus, int id_status){//OK
+int findStatusByCode(Status* status_list, int lenStatus, char flycode[]){//OK
 
 	int index = -1;//RETURNS AN ILLOGICAL VALUE
 
-	if(status_list !=NULL && lenStatus > 0 && id_status != -1){
+	if(status_list !=NULL && lenStatus > 0 && flycode != NULL){
 		for(int i = 0; i < lenStatus; i++){
-			if(status_list[i].id_status == id_status){
+
+			if(strcmp(status_list[i].flycode, flycode) == 0){
 				index = i;//RETURNS POSITION OF ID FOUND
 				break;
 			}
@@ -61,24 +58,15 @@ int findStatusEmpty(Status* status_list, int lenStatus){//OK
 }
 
 //AGREGAR
-int addStatus(Status* status_list, int lenStatus, int id_status){
+int addStatus(Status* status_list, int lenStatus, char flycode[]){
 	int retorno = -1;//FALSE
 	int index;
-	char auxCharCode[10];
 
-	if(status_list !=NULL && lenStatus > 0 && id_status != -1){
+	if(status_list != NULL && lenStatus > 0 && flycode != NULL){
 		index = findStatusEmpty(status_list, lenStatus);
-
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
-				auxCharCode[0] = '1' + (rand() % 10);
-				auxCharCode[1] = 'A' + (rand() % 26);
-				auxCharCode[2] = '1' + (rand() % 11);
-				auxCharCode[3] = 'A' + (rand() % 26);
-				auxCharCode[4] = 'A' + (rand() % 26);
-
-				status_list->id_status = id_status;
-				strncpy(status_list[i].flycode, auxCharCode, sizeof(status_list[i].flycode));
+				strncpy(status_list[i].flycode, flycode, sizeof(status_list[i].flycode));
 				status_list[i].statusFlight = ACTIVE;
 				retorno = 0;//TRUE
 			}
@@ -88,13 +76,13 @@ int addStatus(Status* status_list, int lenStatus, int id_status){
 }
 
 //MODIFICAR
-int changeStatus(Status* status_list, int lenStatus, int id_status, int statusFlight){
+int changeStatus(Status* status_list, int lenStatus, int statusFlight, char flycode[]){
 
 	int retorno = -1;//FALSE
 	int index;
 
-	if(status_list !=NULL && lenStatus > 0 && id_status != -1){
-		index = findStatusById(status_list, lenStatus, id_status);
+	if(status_list !=NULL && lenStatus > 0 && statusFlight != -1 && flycode != NULL){
+		index = findStatusByCode(status_list, lenStatus, flycode);
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
 				status_list[i].statusFlight = statusFlight;
@@ -129,16 +117,16 @@ int printStatus(Status status){//OK
 
 		switch(status.statusFlight){
 		case 1:
-			printf("%d \t%s \tACTIVO\n", status.id_status, status.flycode);
+			printf("%s \tACTIVO\n", status.flycode);
 			break;
 		case 2:
-			printf("%d \t%s \tDEMORADO\n", status.id_status, status.flycode);
+			printf("%s \tDEMORADO\n", status.flycode);
 			break;
 		case 3:
-			printf("%d \t%s \tREPROGRAMADO\n", status.id_status, status.flycode);
+			printf("%s \tREPROGRAMADO\n", status.flycode);
 			break;
 		case 4:
-			printf("%d \t%s \tCANCELADO\n", status.id_status, status.flycode);
+			printf("%s \tCANCELADO\n", status.flycode);
 			break;
 		}
 		retorno = 0;//TRUE
@@ -147,13 +135,13 @@ int printStatus(Status status){//OK
 }
 
 //SUPRIMIR
-int deleteStatus(Status* status_list, int lenStatus, int id_status){
+int deleteStatus(Status* status_list, int lenStatus, char flycode[]){
 
 	int retorno = -1;//FALSE
 	int index;
 
-	if(status_list !=NULL && lenStatus > 0 && id_status != -1){
-		index = findStatusById(status_list, lenStatus, id_status);
+	if(status_list !=NULL && lenStatus > 0 && flycode != NULL){
+		index = findStatusByCode(status_list, lenStatus, flycode);
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
 				status_list[i].statusFlight = CANCELLED;

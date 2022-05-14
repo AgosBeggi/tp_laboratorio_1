@@ -45,12 +45,13 @@ int isChar(char character){//OK
 
 int isString(char chains[]){//OK
 
-	int retorno = 0;//TRUE
+	int retorno = -1;//TRUE
 
 	for (int i = 0; i < strlen(chains); i++){
-		if(!isalpha(chains[i]) && chains[i] != 'ñ'){
-			retorno = -1;//FALSE
-			break;
+		if(isalpha(chains[i]) && chains[i] != 'ñ'){
+			chains[i] = toupper(chains[i]);
+			retorno = 0;//FALSE
+			//break;
 		}
 	}
 	return retorno;

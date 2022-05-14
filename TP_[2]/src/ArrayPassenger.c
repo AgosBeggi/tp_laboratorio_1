@@ -15,14 +15,7 @@ int initPassengers(Passenger* list, int len){
 	Passenger passenger_aux;
 
 	if(list !=NULL && len > 0){
-		passenger_aux.id = EMPTY;
-		strcpy(passenger_aux.name, "0");
-		strcpy(passenger_aux.lastName, "0");
-		passenger_aux.price = EMPTY;
-		strcpy(passenger_aux.flycode, "0");
-		passenger_aux.typePassenger = EMPTY;
 		passenger_aux.isEmpty = EMPTY;
-
 		for(int i = 0; i < len; i++){
 			list[i] = passenger_aux;
 			if(list[i].isEmpty == EMPTY){
@@ -35,26 +28,36 @@ int initPassengers(Passenger* list, int len){
 
 //AGREGAR
 int addPassenger(Passenger* list, int len, int id, char name[],
-		char lastName[], float price, int typePassenger, char flycode[]){
+		char lastName[], float price, int typePassenger, char flycode[],
+		Status* status_list, int lenStatus){
+
 	int retorno = -1;//FALSE
-	int index;
+	int index_P;
+	int index_S;
 	Passenger passenger_aux;
 
-	if(list !=NULL && len > 0 && id != -1 && name != NULL){
-		passenger_aux.id = id;
-		strncpy(passenger_aux.name, name, sizeof(passenger_aux.name));
-		strncpy(passenger_aux.lastName, lastName, sizeof(passenger_aux.lastName));
-		passenger_aux.price = price;
-		strncpy(passenger_aux.flycode, flycode, sizeof(passenger_aux.flycode));
-		passenger_aux.typePassenger = typePassenger;
-		passenger_aux.isEmpty = FULL;
+	if(list != NULL && len > 0 && id != -1 && name !=NULL && lastName !=NULL &&
+		price != EMPTY && typePassenger != EMPTY && flycode != NULL  && status_list != NULL &&
+		lenStatus > 0){
 
-		index = findPassengerEmpty(list, len);
+		index_P = findPassengerEmpty(list, len);
+		index_S = findStatusEmpty(status_list, lenStatus);
 
-		for(int i = 0; i < len; i++){
-			if(i == index){
-				list[i] = passenger_aux;
-				retorno = 0;//TRUE
+		if(addStatus(status_list, lenStatus, flycode) == 0){
+			strncpy(passenger_aux.flycode, status_list[index_S].flycode, sizeof(passenger_aux.flycode));
+			passenger_aux.id = id;
+			strncpy(passenger_aux.name, name, sizeof(passenger_aux.name));
+			strncpy(passenger_aux.lastName, lastName, sizeof(passenger_aux.lastName));
+			passenger_aux.price = price;
+			strncpy(passenger_aux.flycode, flycode, sizeof(passenger_aux.flycode));
+			passenger_aux.typePassenger = typePassenger;
+			passenger_aux.isEmpty = FULL;
+
+			for(int i = 0; i < len; i++){
+				if(i == index_P && i == index_S){
+					list[i] = passenger_aux;
+					retorno = 0;//TRUE
+				}
 			}
 		}
 	}
@@ -126,42 +129,89 @@ int removePassenger(Passenger* list, int len, int id){//OK
 	return retorno;
 }
 
-//Ordena el array de pasajeros por apellido y tipo de pasajero de manera ascendente o descendente.
-// @return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
-int sortPassengers(Passenger *list, int len, int order) {
+//ORDENAR
+int sortPassengers(Passenger *list, int len, int order, Status* status_list, int lenStatus) {
 
 	int retorno = -1;
 	int i;
 	int isOrdered;
 
 	Passenger aux;
+	Status aux_S;
 
 	if (list != NULL && len > 0 && order != -1){
-		do {
-			isOrdered = 1;
-			len--;
-			for (i = 0; i < len; i++) {
-				if (list[i].id > list[i + 1].id) {
-					aux = list[i];
-					list[i] = list[i + 1];
-					list[i + 1] = aux;
-					isOrdered = 0;
-				}
-			}
-		} while (isOrdered == 0);
-		retorno = 0;
+		switch(order){
+			case 1:
+				do {
+					isOrdered = 1;
+					len--;
+					for (i = 0; i < len; i++) {
+						if (list[i].typePassenger > list[i + 1].typePassenger
+							&& strcmp(list[i].flycode, status_list[i].flycode) == 0){
+							aux = list[i];
+							aux_S = status_list[i];
+							list[i] = list[i + 1];
+							status_list[i] = status_list[i + 1];
+							list[i + 1] = aux;
+							status_list[i + 1] = aux_S;
+							isOrdered = 0;
+						}else if(list[i].typePassenger == list[i + 1].typePassenger
+								&& strcmp(list[i].lastName, list[i + 1].lastName) > 0
+								&& strcmp(list[i].flycode, status_list[i].flycode) == 0){
+							aux = list[i];
+							aux_S = status_list[i];
+							list[i] = list[i + 1];
+							status_list[i] = status_list[i + 1];
+							list[i + 1] = aux;
+							status_list[i + 1] = aux_S;
+							isOrdered = 0;
+						}
+					}
+				} while (isOrdered == 0);
+				retorno = 0;
+				break;
+			case 2:
+				do {
+					isOrdered = 1;
+					len--;
+					for (i = 0; i < len; i++) {
+						if (list[i].typePassenger < list[i + 1].typePassenger
+							&& strcmp(list[i].flycode, status_list[i].flycode) == 0) {
+							aux = list[i];
+							aux_S = status_list[i];
+							list[i] = list[i + 1];
+							status_list[i] = status_list[i + 1];
+							list[i + 1] = aux;
+							status_list[i + 1] = aux_S;
+							isOrdered = 0;
+						}else if(list[i].typePassenger == list[i + 1].typePassenger
+								&& strcmp(list[i].lastName, list[i + 1].lastName) < 0
+								&& strcmp(list[i].flycode, status_list[i].flycode) == 0){
+							aux = list[i];
+							aux_S = status_list[i];
+							list[i] = list[i + 1];
+							status_list[i] = status_list[i + 1];
+							list[i + 1] = aux;
+							status_list[i + 1] = aux_S;
+							isOrdered = 0;
+						}
+					}
+				} while (isOrdered == 0);
+				retorno = 0;
+				break;
+		}
 	}
 	return retorno;
 }
 
 //REPORTAR
-int printPassenger(Passenger* list, int len){//OK
+int printPassenger(Passenger* list, int len, Status* status_list, int lenStatus){//OK
 
 	int retorno = -1;//FALSE
 
-	if(list !=NULL && len > 0){
+	if(list !=NULL && len > 0 && status_list !=NULL && lenStatus > 0){
 		for(int i = 0; i < len; i++){
-			if(list[i].isEmpty == FULL && printPassengers(list[i]) == 0){
+			if(list[i].isEmpty == FULL && printPassengers(list[i], status_list[i]) == 0){
 				retorno = 0;//TRUE
 			}
 		}
@@ -169,38 +219,113 @@ int printPassenger(Passenger* list, int len){//OK
  return retorno;
 }
 
-int printPassengers(Passenger passenger){//OK
+int printPassengers(Passenger passenger, Status status){//OK
 
 	int retorno = -1;//FALSE
 
 	if(passenger.isEmpty == FULL){
 		switch(passenger.typePassenger){
 			case 1:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s\n",
-				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode);
+				switch(status.statusFlight){
+					case 1:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tACTIVO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 2:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tDEMORADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 3:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tREPROGRAMADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 4:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tCANCELADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					}
 				break;
 			case 2:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s\n",
-				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode);
+				switch(status.statusFlight){
+					case 1:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tACTIVO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 2:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tDEMORADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 3:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tREPROGRAMADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 4:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tCANCELADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					}
 				break;
 			case 3:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s\n",
-				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode);
+				switch(status.statusFlight){
+					case 1:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tACTIVO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 2:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tDEMORADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 3:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tREPROGRAMADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 4:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tCANCELADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					}
 				break;
 			case 4:
-				printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s\n",
-				passenger.id, passenger.name, passenger.lastName,
-				passenger.price, passenger.flycode);
-				break;
+				switch(status.statusFlight){
+					case 1:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tACTIVO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 2:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tDEMORADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 3:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tREPROGRAMADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					case 4:
+						printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tCANCELADO\n",
+								passenger.id, passenger.name, passenger.lastName,
+								passenger.price, passenger.flycode);
+						break;
+					}
+			break;
 		}
 		retorno = 0;//TRUE
 	}
 	return retorno;
 }
-
 //MODIFICAR
 int modifyPassengerName(Passenger* list, int len, int id, char name[]){//OK
 
