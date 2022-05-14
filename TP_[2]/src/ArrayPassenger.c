@@ -102,7 +102,7 @@ int findPassengerByFlycode(Passenger* list, int len, char flycode[]){//OK
 	if(list !=NULL && len > 0 && flycode != NULL){
 		for(int i = 0; i < len; i++){
 			if(strcmp(list[i].flycode, flycode) == 0){
-				index = i;//RETORNA POSICION DEL ID ENCONTRADO
+				index = i;//RETURNS POSITION OF ID FOUND
 				break;
 			}
 		}

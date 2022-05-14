@@ -1,21 +1,16 @@
 /*
  ============================================================================
  Name        : TP_[2].c
- Author      : Beggi - Agostina
+ Author      : BEGGI A.
  Version     :
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : TP_[2].c in C, Ansi-style
  ============================================================================
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <stdio.h>
-#include <stdlib.h>
 #include "Input.h"
 #include "Menu.h"
 
