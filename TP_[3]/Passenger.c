@@ -346,9 +346,12 @@ int Passenger_edit(Passenger* this){
 	float precio;
 	int tipoPasajero;
 	int estado;
+	char codigo[10];
 
 	char messageOk[250];
+	char messageError[250];
 	strcpy(messageOk, "Operación exitosa");
+	strcpy(messageError, "Error, vuelva a intentarlo.\n");
 
 	if(this != NULL){
 		do{
@@ -358,41 +361,69 @@ int Passenger_edit(Passenger* this){
 			puts("3. PRECIO");
 			puts("4. TIPO DE PASAJERO");
 			puts("5. ESTADO DE VUELO");
+			puts("6. CODIGO DE VUELO");
 			getInt("", &opcion);
 			if(opcion < 1 || opcion > 5){
 				puts("Error, intene nuevamente\n");
 				puts("-----------------------------------------------------------------------------------------------------");
 			}
-		}while(opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5);
+		}while(opcion != 1 && opcion != 2 && opcion != 3 && opcion != 4 && opcion != 5 && opcion != 6);
 			switch(opcion){
 				case 1:
-					getString("NOMBRE: ", nombre);
+					while(getString("NOMBRE: ", nombre) != 0){
+						printf("%s\n", messageError);
+					}
 					printf("lo que escribi: %s\n", nombre);
 					if(Passenger_setNombre(this, nombre) == 0){
 						retorno = 0;
 					}
 					break;
 				case 2:
-					getString("APELLIDO: ", apellido);
+					while(getString("APELLIDO: ", apellido) != 0){
+						printf("%s\n", messageError);
+					}
 					if(Passenger_setApellido(this, apellido) == 0){
 						retorno = 0;
 					}
 					break;
 				case 3:
-					getFloat("PRECIO: ", &precio);
+					do{
+						getFloat("PRECIO: ", &precio);
+						if(precio <= 0){
+							printf("%s\n", messageError);
+						}
+					}while(precio <= 0);
 					if(Passenger_setPrecio(this, precio) == 0){
 						retorno = 0;
 					}
 					break;
 				case 4:
-					getInt("\nTIPO DE PASAJERO:\n 1. FirstClass\n 2. ExecutiveClass\n 3. EconomyClass\n", &tipoPasajero);
+					do{
+						getInt("\nTIPO DE PASAJERO:\n 1. FirstClass\n 2. ExecutiveClass\n 3. EconomyClass\n", &tipoPasajero);
+						if(tipoPasajero < 1 || tipoPasajero > 3){
+							printf("%s\n", messageError);
+						}
+					}while(tipoPasajero != 1 && tipoPasajero != 2 && tipoPasajero != 3);
 					if(Passenger_setTipoPasajero(this, tipoPasajero) == 0){
 						retorno = 0;
 					}
 					break;
 				case 5:
-					getInt("\nESTADO DE VUELO:\n\n1. En Horario\n2. En Vuelo\n3. Demorado\n4. Aterrizado\n", &estado);
+					do{
+						getInt("\nESTADO DE VUELO:\n\n1. En Horario\n2. En Vuelo\n3. Demorado\n4. Aterrizado\n", &estado);
+						if(estado < 1 || estado > 4){
+							printf("%s\n", messageError);
+						}
+					}while(estado != 1 && estado != 2 && estado != 3 && estado != 4);
 					if(Passenger_setEstado(this, estado) == 0){
+						retorno = 0;
+					}
+					break;
+				case 6:
+					while(getCode("CODIGO: \n(sólo 6 digitos)\n", codigo) != 0){
+						printf("%s\n", messageError);
+					}
+					if(Passenger_setCodigoVuelo(this, codigo) == 0){
 						retorno = 0;
 					}
 					break;

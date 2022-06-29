@@ -144,3 +144,19 @@ int getNumberStrings(char message[], char string[]){
 	return retorno;
 }
 
+int getCode(char message[], char string[]){//OK
+
+	char aux[10];
+	int retorno = -1;
+
+	printf("%s", message);
+	fflush(stdin);
+	scanf( "%s", aux);
+
+	if(isStringAlnumCode(aux) == 0){
+		puts("volvio de validar codigo");
+		strcpy(string, aux);
+		retorno = 0;
+	}
+	return retorno;
+}

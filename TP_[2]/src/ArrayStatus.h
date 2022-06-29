@@ -62,7 +62,7 @@ int findStatusEmpty(Status* status_list, int lenStatus);
 /// \param flycode
 /// \return int Return (-1) if Error [Invalid length or NULL pointer or without
 ///free space] - (0) if Ok
-int addStatus(Status* status_list, int lenStatus, char flycode[]);
+int addStatus(Status* status_list, int lenStatus, char flycode[], int status);
 
 //MODIFICACIONES
 /// \fn int changeStatus(Status*, int, int, char[])

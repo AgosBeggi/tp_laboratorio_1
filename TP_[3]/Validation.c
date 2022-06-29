@@ -107,3 +107,23 @@ int isNumberStrings(char chains[]){
 	return retorno;
 }
 
+int isStringAlnumCode(char chains[]){
+
+	int retorno = 0;
+	int len = strlen(chains);
+
+	if(len == 6){
+		for (int i = 0; i < len; i++){
+		chains[i] = toupper(chains[i]);
+			if(!isalnum(chains[i]) && chains[i] != 'ñ'){
+				retorno = -1;
+				break;
+			}
+		}
+	}else{
+		retorno = -1;
+	}
+
+
+	return retorno;
+}

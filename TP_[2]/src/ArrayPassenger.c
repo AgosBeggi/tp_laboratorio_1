@@ -28,7 +28,7 @@ int initPassengers(Passenger* list, int len){
 
 //AGREGAR
 int addPassenger(Passenger* list, int len, int id, char name[],
-		char lastName[], float price, int typePassenger, char flycode[],
+		char lastName[], float price, int typePassenger, char flycode[], int statePassenger,
 		Status* status_list, int lenStatus){
 
 	int retorno = -1;//FALSE
@@ -37,13 +37,13 @@ int addPassenger(Passenger* list, int len, int id, char name[],
 	Passenger passenger_aux;
 
 	if(list != NULL && len > 0 && id != -1 && name !=NULL && lastName !=NULL &&
-		price != EMPTY && typePassenger != EMPTY && flycode != NULL  && status_list != NULL &&
-		lenStatus > 0){
+		price != EMPTY && typePassenger != EMPTY && flycode != NULL  && statePassenger > 0
+		&& status_list != NULL && lenStatus > 0){
 
 		index_P = findPassengerEmpty(list, len);
 		index_S = findStatusEmpty(status_list, lenStatus);
 
-		if(addStatus(status_list, lenStatus, flycode) == 0){
+		if(addStatus(status_list, lenStatus, flycode, statePassenger) == 0){
 			strncpy(passenger_aux.flycode, status_list[index_S].flycode, sizeof(passenger_aux.flycode));
 			passenger_aux.id = id;
 			strncpy(passenger_aux.name, name, sizeof(passenger_aux.name));
@@ -145,19 +145,10 @@ int sortPassengers(Passenger *list, int len, int order, Status* status_list, int
 				do {
 					isOrdered = 1;
 					len--;
-					for (i = 0; i < len; i++) {
-						if (list[i].typePassenger > list[i + 1].typePassenger
-							&& strcmp(list[i].flycode, status_list[i].flycode) == 0){
-							aux = list[i];
-							aux_S = status_list[i];
-							list[i] = list[i + 1];
-							status_list[i] = status_list[i + 1];
-							list[i + 1] = aux;
-							status_list[i + 1] = aux_S;
-							isOrdered = 0;
-						}else if(list[i].typePassenger == list[i + 1].typePassenger
-								&& strcmp(list[i].lastName, list[i + 1].lastName) > 0
-								&& strcmp(list[i].flycode, status_list[i].flycode) == 0){
+					for (i = 0; i < len; i++){
+						if (strcmp(list[i].lastName, list[i+1].lastName) > 0 ||
+								(strcmp(list[i].lastName, list[i + 1].lastName) == 0
+							&&	list[i].typePassenger > list[i + 1].typePassenger)){
 							aux = list[i];
 							aux_S = status_list[i];
 							list[i] = list[i + 1];
@@ -175,8 +166,9 @@ int sortPassengers(Passenger *list, int len, int order, Status* status_list, int
 					isOrdered = 1;
 					len--;
 					for (i = 0; i < len; i++) {
-						if (list[i].typePassenger < list[i + 1].typePassenger
-							&& strcmp(list[i].flycode, status_list[i].flycode) == 0) {
+						if (strcmp(list[i].lastName, list[i+1].lastName) < 0 ||
+								(strcmp(list[i].lastName, list[i + 1].lastName) == 0
+							&&	list[i].typePassenger < list[i + 1].typePassenger)){
 							aux = list[i];
 							aux_S = status_list[i];
 							list[i] = list[i + 1];
@@ -184,9 +176,55 @@ int sortPassengers(Passenger *list, int len, int order, Status* status_list, int
 							list[i + 1] = aux;
 							status_list[i + 1] = aux_S;
 							isOrdered = 0;
-						}else if(list[i].typePassenger == list[i + 1].typePassenger
-								&& strcmp(list[i].lastName, list[i + 1].lastName) < 0
-								&& strcmp(list[i].flycode, status_list[i].flycode) == 0){
+						}
+					}
+				} while (isOrdered == 0);
+				retorno = 0;
+				break;
+		}
+	}
+	return retorno;
+}
+
+int sortPassengers2(Passenger *list, int len, int order, Status* status_list, int lenStatus) {
+
+	int retorno = -1;
+	int i;
+	int isOrdered;
+
+	Passenger aux;
+	Status aux_S;
+
+	if (list != NULL && len > 0 && order != -1){
+		switch(order){
+			case 1:
+				do {
+					isOrdered = 1;
+					len--;
+					for (i = 0; i < len; i++){
+						if (strcmp(list[i].flycode, list[i+1].flycode) > 0 ||
+								(strcmp(list[i].flycode, list[i + 1].flycode) == 0
+							&&	status_list[i].statusFlight > status_list[i + 1].statusFlight)){
+							aux = list[i];
+							aux_S = status_list[i];
+							list[i] = list[i + 1];
+							status_list[i] = status_list[i + 1];
+							list[i + 1] = aux;
+							status_list[i + 1] = aux_S;
+							isOrdered = 0;
+						}
+					}
+				} while (isOrdered == 0);
+				retorno = 0;
+				break;
+			case 2:
+				do {
+					isOrdered = 1;
+					len--;
+					for (i = 0; i < len; i++) {
+						if (strcmp(list[i].flycode, list[i+1].flycode) < 0 ||
+								(strcmp(list[i].flycode, list[i + 1].flycode) == 0
+							&&	status_list[i].statusFlight < status_list[i + 1].statusFlight)){
 							aux = list[i];
 							aux_S = status_list[i];
 							list[i] = list[i + 1];
@@ -212,6 +250,20 @@ int printPassenger(Passenger* list, int len, Status* status_list, int lenStatus)
 	if(list !=NULL && len > 0 && status_list !=NULL && lenStatus > 0){
 		for(int i = 0; i < len; i++){
 			if(list[i].isEmpty == FULL && printPassengers(list[i], status_list[i]) == 0){
+				retorno = 0;//TRUE
+			}
+		}
+	}
+ return retorno;
+}
+
+int printActivePassengers(Passenger* list, int len, Status* status_list, int lenStatus){//OK
+
+	int retorno = -1;//FALSE
+
+	if(list !=NULL && len > 0 && status_list !=NULL && lenStatus > 0){
+		for(int i = 0; i < len; i++){
+			if(list[i].isEmpty == FULL && printActivePassenger(list[i], status_list[i]) == 0){
 				retorno = 0;//TRUE
 			}
 		}
@@ -326,6 +378,38 @@ int printPassengers(Passenger passenger, Status status){//OK
 	}
 	return retorno;
 }
+
+int printActivePassenger(Passenger passenger, Status status){//OK
+
+	int retorno = -1;//FALSE
+
+	if(passenger.isEmpty == FULL && status.statusFlight == 1){
+		switch(passenger.typePassenger){
+			case 1:
+				printf("%d \t%-7s \t%-7s \t%0.2f \tPRIMERA CLASE \t%-7s \tACTIVO\n",
+				passenger.id, passenger.name, passenger.lastName,
+				passenger.price, passenger.flycode);
+				break;
+			case 2:
+				printf("%d \t%-7s \t%-7s \t%0.2f \tEJECUTIVO \t%-7s \tDEMORADO\n",
+				passenger.id, passenger.name, passenger.lastName,
+				passenger.price, passenger.flycode);
+				break;
+			case 3:
+				printf("%d \t%-7s \t%-7s \t%0.2f \tPREMIUM \t%-7s \tACTIVO\n",
+				passenger.id, passenger.name, passenger.lastName,
+				passenger.price, passenger.flycode);
+				break;
+			case 4:
+				printf("%d \t%-7s \t%-7s \t%0.2f \tTURISTA \t%-7s \tACTIVO\n",
+				passenger.id, passenger.name, passenger.lastName,
+				passenger.price, passenger.flycode);
+				break;
+		}
+		retorno = 0;//TRUE
+	}
+	return retorno;
+}
 //MODIFICAR
 int modifyPassengerName(Passenger* list, int len, int id, char name[]){//OK
 
@@ -416,45 +500,3 @@ int modifyPassengerFlycode(Passenger* list, int len, int id, char flycode[]){//O
 	}
 	return retorno;
 }
-
-
-//Imaginemos que el caso que estamos tratando no es complicado ya que solo se cuenta con 2
-//campos, pero si la estructura tuviese más campos, se debería asignar uno por uno y la tarea
-//sería tediosa.
-//Ejemplo 2
-//Cargar los datos en una estructura para luego copiar los datos a otra.
-
-//#include <stdio.h>
-//#include <string.h>
-//struct fecha { int dia,mes,anio;};
-
-//struct gente {
-//char nombre[20];
-//struct fecha f_nacimiento;
-//};
-
-//void main(void){
-	//struct gente pers;
-	//struct fecha fn;
-
-	//printf("Ingrese nombre");
-	//gets(pers.nombre);
-
-	//printf("Ingrese dia de nacimiento");
-	//scanf("%d",&fn.dia);
-
-	//printf("Ingrese mes de nacimiento");
-	//scanf("%d",&fn.mes);
-
-	//printf("Ingrese anio de nacimiento");
-	//scanf("%d",&fn.anio);
-
-	//acá se pasa el dia, mes y anio a la otra estructura que tiene el dato fecha con tipo de dato estruscura fecha
-	//pers.f_nacimiento=fn;
-//}
-
-//Notas:
-//• Los campos de una estructura pueden ser cualquiera de los tipos de variables conocidas
-//(char , int , float , double) y tambien pueden ser vectores , matrices o punteros.
-//• No se puede tener como estructura anidada a la misma estructura que se esta
-//definiendo

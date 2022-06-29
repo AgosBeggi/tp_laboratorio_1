@@ -56,8 +56,8 @@ int hardcodeListMenu(Passenger* list, int len, int id, Status* status_list, int 
 /// \param status_list
 /// \param lenStatus
 /// \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
-int singUpMenu(Passenger* list, int len, int id, char name[],char lastName[],
-		float price, int typePassenger,char flycode[], Status* status_list, int lenStatus);
+int singUpMenu(Passenger* list, int len, int id, char name[],char lastName[], float price, int typePassenger,
+		char flycode[], int status, Status* status_list, int lenStatus);
 
 /// \fn int deleteMenu(Passenger*, int, int, Status*, int)
 /// \brief calls removePassenger and deleteStatus to remove an element in both parameter lists.
@@ -91,7 +91,9 @@ int modificationsMenu(Passenger* list, int len, int id, int option, char message
 /// \param status_list
 /// \param lenStatus
 /// \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
-int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus);
+int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus, int criterio);
+
+int reportPriceMenu(Passenger* list, int len, Status* status_list, int lenStatus, float* totalPasajes, float* promedioPasajes);
 
 /// \fn int orderMenu(Passenger*, int, Status*, int, int)
 /// \brief calls sortPassengers to sort the data from the two parameter lists
@@ -101,7 +103,7 @@ int reportsMenu(Passenger* list, int len, Status* status_list, int lenStatus);
 /// \param lenStatus
 /// \param order
 /// \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
-int orderMenu(Passenger* list, int len, Status* status_list, int lenStatus, int order);
+int orderMenu(Passenger* list, int len, Status* status_list, int lenStatus, int order, int criterio);
 
 /// \fn int findElemenMenu(Passenger*, int, int, char[], Status*)
 /// \brief calls findPassengerById and if it returns a valid position, prints the selected

@@ -58,7 +58,7 @@ int initPassengers(Passenger* list, int len);
 /// \return int Return (-1) if Error [Invalid length or NULL pointer or without
 ///free space] - (0) if Ok
 int addPassenger(Passenger* list, int len, int id, char name[],
-		char lastName[], float price, int typePassenger, char flycode[],
+		char lastName[], float price, int typePassenger, char flycode[], int statePassenger,
 		Status* status_list, int lenStatus);
 
 //BUSQUEDA
@@ -110,6 +110,8 @@ int removePassenger(Passenger* list, int len, int id);
 /// \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
 int sortPassengers(Passenger* list, int len, int order, Status* status_list, int lenStatus);
 
+int sortPassengers2(Passenger* list, int len, int order, Status* status_list, int lenStatus);
+
 //INFORMES
 /// \fn int printPassenger(Passenger*, int, Status*, int)
 /// \brief print the content of passengers array.
@@ -119,6 +121,10 @@ int sortPassengers(Passenger* list, int len, int order, Status* status_list, int
 /// \param lenStatus
 /// \return int int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok
 int printPassenger(Passenger* list, int len, Status* status_list, int lenStatus);
+
+int printActivePassengers(Passenger* list, int len, Status* status_list, int lenStatus);
+
+int printActivePassenger(Passenger passenger, Status status);
 
 /// \fn int printPassengers(Passenger, Status)
 /// \brief print the content of a single element of the array.

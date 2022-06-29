@@ -10,7 +10,7 @@
 //INICIALIZACIÓN
 int initStatus(Status* status_list, int lenStatus){
 
-	int retorno = -1;//FALSE
+	int retorno = -1;
 	Status status_aux;
 
 	if(status_list !=NULL && lenStatus > 0){
@@ -18,7 +18,7 @@ int initStatus(Status* status_list, int lenStatus){
 		for(int i = 0; i < lenStatus; i++){
 			status_list[i] = status_aux;
 			if(status_list[i].statusFlight == EMPTY){
-				retorno = 0;//TRUE
+				retorno = 0;
 			}
 		}
 	}
@@ -58,8 +58,8 @@ int findStatusEmpty(Status* status_list, int lenStatus){//OK
 }
 
 //AGREGAR
-int addStatus(Status* status_list, int lenStatus, char flycode[]){
-	int retorno = -1;//FALSE
+int addStatus(Status* status_list, int lenStatus, char flycode[], int status){
+	int retorno = -1;
 	int index;
 
 	if(status_list != NULL && lenStatus > 0 && flycode != NULL){
@@ -67,8 +67,8 @@ int addStatus(Status* status_list, int lenStatus, char flycode[]){
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
 				strncpy(status_list[i].flycode, flycode, sizeof(status_list[i].flycode));
-				status_list[i].statusFlight = ACTIVE;
-				retorno = 0;//TRUE
+				status_list[i].statusFlight = status;
+				retorno = 0;
 			}
 		}
 	}
@@ -78,7 +78,7 @@ int addStatus(Status* status_list, int lenStatus, char flycode[]){
 //MODIFICAR
 int changeStatus(Status* status_list, int lenStatus, int statusFlight, char flycode[]){
 
-	int retorno = -1;//FALSE
+	int retorno = -1;
 	int index;
 
 	if(status_list !=NULL && lenStatus > 0 && statusFlight != -1 && flycode != NULL){
@@ -86,7 +86,7 @@ int changeStatus(Status* status_list, int lenStatus, int statusFlight, char flyc
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
 				status_list[i].statusFlight = statusFlight;
-				retorno = 0;//TRUE
+				retorno = 0;
 				break;
 			}
 		}
@@ -97,12 +97,12 @@ int changeStatus(Status* status_list, int lenStatus, int statusFlight, char flyc
 //REPORTAR
 int printStatusList(Status* status_list, int lenStatus){//OK
 
-	int retorno = -1;//FALSE
+	int retorno = -1;
 
 	if(status_list !=NULL && lenStatus > 0){
 		for(int i = 0; i < lenStatus; i++){
 			if(status_list[i].statusFlight != EMPTY && printStatus(status_list[i]) == 0){
-				retorno = 0;//TRUE
+				retorno = 0;
 			}
 		}
 	}
@@ -111,7 +111,7 @@ int printStatusList(Status* status_list, int lenStatus){//OK
 
 int printStatus(Status status){//OK
 
-	int retorno = -1;//FALSE
+	int retorno = -1;
 
 	if(status.statusFlight != EMPTY){
 
@@ -129,7 +129,7 @@ int printStatus(Status status){//OK
 			printf("%s \tCANCELADO\n", status.flycode);
 			break;
 		}
-		retorno = 0;//TRUE
+		retorno = 0;
 	}
 	return retorno;
 }
@@ -137,7 +137,7 @@ int printStatus(Status status){//OK
 //SUPRIMIR
 int deleteStatus(Status* status_list, int lenStatus, char flycode[]){
 
-	int retorno = -1;//FALSE
+	int retorno = -1;
 	int index;
 
 	if(status_list !=NULL && lenStatus > 0 && flycode != NULL){
@@ -145,7 +145,7 @@ int deleteStatus(Status* status_list, int lenStatus, char flycode[]){
 		for(int i = 0; i < lenStatus; i++){
 			if(i == index){
 				status_list[i].statusFlight = CANCELLED;
-				retorno = 0;//TRUE
+				retorno = 0;
 				break;
 			}
 		}

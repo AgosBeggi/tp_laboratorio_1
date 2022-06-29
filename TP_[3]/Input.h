@@ -93,4 +93,6 @@ int getStringAlnum(char message[], char string[]);
 /// @return Returns 0 for true and -1 for false.
 int getNumberStrings(char message[], char string[]);
 
+int getCode(char message[], char string[]);
+
 #endif /* INPUT_H_ */

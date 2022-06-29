@@ -44,4 +44,6 @@ int isString(char string[]);
 /// \return Returns 0 for true and -1 for false.
 int isStringAlnum(char chains[]);
 
+int isStringAlnumCode(char chains[]);
+
 #endif /* VALIDATION_H_ */

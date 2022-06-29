@@ -49,41 +49,46 @@ int controller_addPassenger(LinkedList* pArrayListPassenger){//OK
 	char aux_Codigo[50];
 	int estadoPasajero;
 	char aux_Estado[50];
+	char messageError[250];
+	strcpy(messageError, "Error, vuelva a intentarlo.\n");
 
 	if(pArrayListPassenger != NULL){
 		parser_getLastId("Id.csv", last_Id);
 		if(parser_setLastId("Id.csv") == 0){
-			//INGRESO NOMBRE
-			getString("NOMBRE: ", aux_Nombre);
-			//INGRESO APELLIDO
-			getString("APELLIDO: ", aux_Apellido);
-			//INGRESO PRECIO
-			getFloat("PRECIO: ", &precio);
-			//LO PASO A CADENA DE CARACTERES
+
+			while(getString("NOMBRE: ", aux_Nombre) != 0){
+				printf("%s\n", messageError);
+			}
+			while(getString("APELLIDO: ", aux_Apellido) != 0){
+				printf("%s\n", messageError);
+			}
+			do{
+				getFloat("PRECIO: ", &precio);
+				if(precio <= 0){
+					printf("%s\n", messageError);
+				}
+			}while(precio <= 0);
 			sprintf(aux_Precio,"%f",precio);
 			do{
-				//INGRESO TIPO DE PASAJERO
 				printf("\nTIPO DE PASAJERO:\n 1. FirstClass\n 2. ExecutiveClass\n 3. EconomyClass\n");
 				getInt("", &tipoPasajero);
 				if(tipoPasajero < 1 || tipoPasajero > 3){
 					printf("Error, intene nuevamente\n");
 				}
 			}while(tipoPasajero != 1 && tipoPasajero != 2 && tipoPasajero != 3);
-			//PARSEO EL TIPO DE PASAJERO
 			Passenger_translateTypeIntToStr(tipoPasajero, auxTipoPasajero);
 			do{
-				//INGRESO ESTADO
 				printf("\nESTADO DE VUELO:\n\n 1. En Horario\n 2. En Vuelo\n 3. Demorado\n 4. Aterrizado\n");
 				getInt("", &estadoPasajero);
 				if(estadoPasajero < 1 || estadoPasajero > 4){
 					printf("Error, intene nuevamente\n");
 				}
 			}while(estadoPasajero != 1 && estadoPasajero != 2 && estadoPasajero != 3 && estadoPasajero != 4);
-			//PARSEO EL ESTADO DE PASAJERO
 			Passenger_translateStateIntToStr(estadoPasajero, aux_Estado);
-			//GENERO UN CODIGO DE VUELO
-			controller_generateCode(aux_Codigo);
 
+			while(getCode("CODIGO: \n(sólo 6 digitos)\n", aux_Codigo) != 0){
+				printf("%s\n", messageError);
+			}
 			auxPassenger = Passenger_newParametros(last_Id, aux_Nombre, aux_Apellido, aux_Precio, auxTipoPasajero, aux_Codigo, aux_Estado);
 			retorno = ll_add(pArrayListPassenger, auxPassenger);
 
@@ -103,16 +108,11 @@ int controller_editPassenger(LinkedList* pArrayListPassenger){//OK
 	int index;
 
 	if(pArrayListPassenger != NULL){
-		//IMPRIME LA LISTA
 		controller_ListPassenger(pArrayListPassenger);
-		//GUARDA EL ID A MODIFICAR
 		getInt("Ingrese el id del pasajero que desea modificar\n", &id);
-		//OBTIENE EL INDEX DEL PASAJERO
 		index = controller_findIndexById(pArrayListPassenger, id);
 		if(index != -1){
-			//OBTIENE LA DIR DE MEMORIA DEL PASAJERO
 			auxPassenger = (Passenger*) ll_get(pArrayListPassenger, index);
-			//IMPRIME EL PASAJERO
 			printf("ID \tNOMBRE \t\tAPELLIDO  \tPRECIO \t\tCODIGO \t\tTIPO  \t\tESTADO\n");
 			Passenger_print(auxPassenger);
 			puts("-----------------------------------------------------------------------------------------------------");
@@ -135,16 +135,11 @@ int controller_removePassenger(LinkedList* pArrayListPassenger){//OK
 
 	if(pArrayListPassenger != NULL){
 		if(pArrayListPassenger != NULL){
-			//IMPRIME LA LISTA
 			controller_ListPassenger(pArrayListPassenger);
-			//GUARDA EL ID A MODIFICAR
 			getInt("Ingrese el id del pasajero que desea eliminar\n", &id);
-			//OBTIENE EL INDEX DEL PASAJERO
 			index = controller_findIndexById(pArrayListPassenger, id);
 			if(index != -1){
-				//OBTIENE LA DIR DE MEMORIA DEL PASAJERO
 				auxPassenger = (Passenger*) ll_get(pArrayListPassenger, index);
-				//IMPRIME EL PASAJERO
 				printf("ID \tNOMBRE \t\tAPELLIDO  \tPRECIO \t\tCODIGO \t\tTIPO  \t\tESTADO\n");
 				Passenger_print(auxPassenger);
 				puts("-----------------------------------------------------------------------------------------------------");

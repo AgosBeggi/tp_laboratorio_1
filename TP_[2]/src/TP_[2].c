@@ -5,6 +5,16 @@
  Version     :
  Copyright   : Your copyright notice
  Description : TP_[2].c in C, Ansi-style
+
+ El trabajo se considera incompleto ya que la opcion "4-Informar" solo tiene un listar con las
+opciones ordenar de forma ascdendente o descendente, no se entiende que toma por criterio de
+ordenamiento.
+El punto 4 pide:
+4. INFORMAR:
+1. Listado de los pasajeros ordenados alfabéticamente por Apellido y Tipo de pasajero.
+2. Total y promedio de los precios de los pasajes, y cuántos pasajeros superan el precio
+promedio.
+3. Listado de los pasajeros por Código de vuelo y estados de vuelos ‘ACTIVO’
  ============================================================================
  */
 
@@ -31,6 +41,7 @@ int main(void) {
 	int option;
 	int option_aux;
 	int orden;
+	int criterio;
 
 	int flag = 0;
 	int flagControl = 0;
@@ -40,6 +51,11 @@ int main(void) {
 	float price;
 	char flycode[10];
 	int typePassenger;
+	int status;
+
+	float totalPasajes;
+	float promedioPasajes;
+	int contadorPasajesArribaPromedio;
 
 	char messageTypePassenger[250];
 	char messageOk[250];
@@ -49,7 +65,7 @@ int main(void) {
 
 	strcpy(messageTypePassenger, "\nTIPO DE PASAJERO:\n 1. PRIMERA CLASE\n 2. EJECUTIVO\n 3. PREMIUM\n 4. TURISTA\n");
 	strcpy(messageOk, "Operación exitosa");
-	strcpy(messageError, "Opción incorrecta, vuelva a intentarlo.\n");
+	strcpy(messageError, "Error, vuelva a intentarlo.\n");
 	strcpy(messageTitle, "ID \tNOMBRE \t\tAPELLIDO  \tPRECIO \t\tTIPO \t\tCODIGO  \tESTADO\n"
 			"-----------------------------------------------------------------------------------------------------");
 	strcpy(messageStatus, "ESTADO DE VUELO\n\n1. ACTIVO\n2. DEMORADO\n3. REPROGRAMADO\n4. CANCELADO\n");
@@ -88,10 +104,19 @@ int main(void) {
 				case 1:
 					//ALTA
 					id = idMenu();
-					if(flagControl == 0){
-						getString("NOMBRE: ", name);
-						getString("APELLIDO: ", lastName);
-						getFloat("PRECIO: ", &price);
+					if(flagControl == 0 || flagControl == 1){
+						while(getString("NOMBRE: ", name) != 0){
+							printf("%s\n", messageError);
+						}
+						while(getString("APELLIDO: ", lastName) != 0){
+							printf("%s\n", messageError);
+						}
+						do{
+							getFloat("PRECIO: ", &price);
+							if(price <= 0){
+								printf("%s\n", messageError);
+							}
+						}while(price <= 0);
 						do{
 							printf("%s\n", messageTypePassenger);
 							getInt("", &typePassenger);
@@ -100,11 +125,19 @@ int main(void) {
 							}
 						}while(typePassenger != 1 && typePassenger != 2 && typePassenger != 3 && typePassenger != 4);
 
-						generateCodeMenu(flycode);
+						while(getCode("CODIGO: \n(sólo 6 digitos)\n", flycode) != 0){
+							printf("%s\n", messageError);
+						}
 
+						do{
+							printf("%s\n", messageStatus);
+							getInt("", &status);
+							if(status < 1 || status > 4){
+								printf("%s\n", messageError);
+							}
+						}while(status != 1 && status != 2 && status != 3 && status != 4);
 
-
-						if(singUpMenu(list, ELEMENTS, id, name, lastName, price, typePassenger, flycode, status_list, ELEMENTS)==0){
+						if(singUpMenu(list, ELEMENTS, id, name, lastName, price, typePassenger, flycode, status, status_list, ELEMENTS)==0){
 							puts("-----------------------------------------------------------------------------------------------------");
 							printf("%s\n", messageOk);
 							puts("-----------------------------------------------------------------------------------------------------");
@@ -117,7 +150,7 @@ int main(void) {
 					if(flagControl == 1 || flag == 1){
 					do{
 						printf("%s\n", messageTitle);
-						reportsMenu(list, ELEMENTS, status_list, ELEMENTS);
+						reportsMenu(list, ELEMENTS, status_list, ELEMENTS, 1);
 						puts("-----------------------------------------------------------------------------------------------------");
 						getInt("Ingrese el id del pasajero que desea modificar\n", &numeroId);
 
@@ -188,7 +221,7 @@ int main(void) {
 					if(flagControl == 1 || flag == 1){
 						do{
 							printf("%s\n", messageTitle);
-							reportsMenu(list, ELEMENTS, status_list, ELEMENTS);
+							reportsMenu(list, ELEMENTS, status_list, ELEMENTS, 1);
 							puts("-----------------------------------------------------------------------------------------------------");
 							getInt("Ingrese el id del pasajero que desea eliminar\n", &numeroId);
 
@@ -213,20 +246,53 @@ int main(void) {
 				case 4:
 					//INFORMES
 					if(flagControl == 1 || flag == 1){
-						puts("¿Cómo desea ordenar la lista?\n");
-						puts("1. DESCENDENTE");
-						puts("2. ASCENDENTE");
+						puts("¿Qué informe desea visualizar?\n");
+						puts("1. Listado de los pasajeros ordenados alfabéticamente por Apellido y Tipo de pasajero.");
+						puts("2. Total y promedio de los precios de los pasajes, y cuántos pasajeros superan el precio promedio.");
+						puts("3. Listado de los pasajeros por Código de vuelo y estados de vuelos ‘ACTIVO’");
 						puts("-----------------------------------------------------------------------------------------------------");
-						getInt("", &orden);
-						while(orden != 1 && orden != 2){
-							getInt(messageError, &orden);
+						getInt("", &criterio);
+						while(criterio != 1 && criterio != 2 && criterio != 3){
+							getInt(messageError, &criterio);
+						}
+						if(criterio != 2){
+							puts("¿Cómo desea ordenar la lista?\n");
+							puts("1. DESCENDENTE");
+							puts("2. ASCENDENTE");
+							puts("-----------------------------------------------------------------------------------------------------");
+							getInt("", &orden);
+							while(orden != 1 && orden != 2){
+								getInt(messageError, &orden);
+							}
+						}
+						switch(criterio){
+						case 1:
+							if(orderMenu(list, ELEMENTS, status_list, ELEMENTS, orden, criterio) == 0){
+								printf("%s\n", messageTitle);
+								reportsMenu(list, ELEMENTS, status_list, ELEMENTS, criterio);
+								puts("-----------------------------------------------------------------------------------------------------");
+							}
+							break;
+						case 2:
+							contadorPasajesArribaPromedio = reportPriceMenu(list, ELEMENTS, status_list, ELEMENTS, &totalPasajes, &promedioPasajes);
+							if(contadorPasajesArribaPromedio > 0){
+								printf("La suma total de todos los precios de los pasajes es %.2f\n", totalPasajes);
+								printf("El promedio de los pasajes es %.2f\n", promedioPasajes);
+								printf("La cantidad de pasajes con un precio mayor al promedio es %d\n", contadorPasajesArribaPromedio);
+								puts("-----------------------------------------------------------------------------------------------------");
+							}
+							break;
+						case 3:
+							if(orderMenu(list, ELEMENTS, status_list, ELEMENTS, orden, criterio) == 0){
+								printf("%s\n", messageTitle);
+								reportsMenu(list, ELEMENTS, status_list, ELEMENTS, criterio);
+								puts("-----------------------------------------------------------------------------------------------------");
+							}
+							break;
 						}
 
-						if(orderMenu(list, ELEMENTS, status_list, ELEMENTS, orden) == 0){
-							printf("%s\n", messageTitle);
-						reportsMenu(list, ELEMENTS, status_list, ELEMENTS);
-						puts("-----------------------------------------------------------------------------------------------------");
-						}
+
+
 					}else{puts("No es posible realizar la operacion, no hay datos cargados.\n");}
 					break;
 				case 5:

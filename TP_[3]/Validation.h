@@ -60,4 +60,6 @@ int isStringAlnum(char chains[]);
 /// @return
 int isNumberStrings(char chains[]);
 
+int isStringAlnumCode(char chains[]);
+
 #endif /* VALIDATION_H_ */
